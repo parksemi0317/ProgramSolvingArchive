@@ -6,10 +6,16 @@ def factorial(num):
         result *= i
     return result
 
+def aCb(a, b):
+    result = 1
+    for i in range(b):
+        result *= a
+        a-=1
+    return result // factorial(b)
+
 result = 0
 
 for k in range(n//2 + 1):
-    temp = factorial(n-k) // (factorial(k) * factorial(n-2*k))
-    result += temp % 10007
+    result += aCb(n-k, k)
     result %= 10007
 print(result)
