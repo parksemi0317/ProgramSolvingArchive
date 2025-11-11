@@ -8,15 +8,16 @@ T = int(input().rstrip())
 for _ in range(T):
     n = int(input().rstrip())
 
-    stickers = []
+    stickers = [] # 스티커 점수 정보 배열
+
     for i in range(2):
         stickers.append(list(map(int, input().rstrip().split())))
 
+    dp = [[0 for _ in range(n)] for _ in range(2)] # i, j를 포함하는, x<=j 조합의 최댓값
 
-    dp = [[0 for _ in range(n)] for _ in range(2)]
+    # 시작 dp 값 초기화
     dp[0][0] = stickers[0][0]
     dp[1][0] = stickers[1][0]
-
     if n > 1:
         dp[0][1] = dp[1][0] + stickers[0][1]
         dp[1][1] = dp[0][0] + stickers[1][1]
