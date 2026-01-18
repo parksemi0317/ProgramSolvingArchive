@@ -15,38 +15,47 @@ D = [0 for _ in range(N)]
 for i in range(N):
     A[i], B[i], C[i], D[i] = map(int, input().rstrip().split())
 
-# ============= 딕셔너리로 변환 =============
-def convertToDict(arr):
-    result = {}
 
-    for n in arr:
-        if n in result:
-            result[n] += 1
-        else:
-            result[n] = 1
-    return result
+# ============= 딕셔너리 두개씩 합치기 =============
+def mergeList(p, q):
+    r = []
 
-A = convertToDict(A)
-B = convertToDict(B)
-C = convertToDict(C)
-D = convertToDict(D)
+    for num1 in p:
+        for num2 in q:
+            r.append(num1 + num2)
+    return r
 
-# ============= 딕셔너리 AB 합치기 =============
-
-AB = {}
-for num1 in A:
-    for num2 in B:
-        if num1 + num2 in AB:
-            AB[num1 + num2] += A[num1] * B[num2]
-        else:
-            AB[num1 + num2] = A[num1] * B[num2]
+AB = mergeList(A, B)
+CD = mergeList(C, D)
 
 # ============= 전체합 구하기 =============
+
+AB.sort()
+CD.sort()
+lenAB = len(AB)
+lenCD = len(CD)
+
 result = 0
+idx1 = 0
+idx2 = lenCD-1
 
-for num1 in C:
-    for num2 in D:
-        if -(num1 + num2) in AB:
-            result += AB[-(num1 + num2)] * C[num1] * D[num2]
 
-print(f"{result}")
+while  idx1 < lenAB and idx2 >= 0:
+    # print(f"[DEBUG] idx1 : {idx1}, idx2 : {idx2}\n")
+    if AB[idx1] + CD[idx2] == 0:
+        prevIdx1 = idx1
+        while idx1 <lenAB and AB[idx1] == AB[prevIdx1]:
+            idx1 += 1
+
+        prevIdx2 = idx2
+        while idx2 >= 0 and CD[idx2] == CD[prevIdx2]:
+            idx2 -= 1
+            
+        result += (idx1 - prevIdx1) * (prevIdx2 - idx2)
+
+        
+    elif AB[idx1] + CD[idx2] > 0:
+        idx2 -= 1
+    else:
+        idx1 += 1
+print(F"{result}")
