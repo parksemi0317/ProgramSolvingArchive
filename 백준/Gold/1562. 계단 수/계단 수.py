@@ -1,35 +1,32 @@
 import sys
-DIV = 1000000000
 ALL = (0b1 << 10) -1
-
+MOD = 10**9;
+# 3차원 DB 풀이
 N = int(input())
 
-dp = {}
+# [N][10][ALL]
+# [길이-1][마지막 수][비트마스크]
+dp =[[[0 for _ in range(ALL + 1)] for _ in range(10)] for i in range(N)]
 
-def dfs(leftLen, bitMask, lastNum):
-    global N
-    
-    key = str(lastNum) + " " + str(leftLen) + " " + str(bitMask)
-    if key in dp:
-        return dp[key]
-
-    if leftLen == 0:
-        if bitMask == ALL:
-            return 1
-        else:
-            return 0
-    
-    result = 0
-    if lastNum > 0:
-        tempBitMask = 0b1 << (lastNum-1)
-        result += dfs(leftLen-1, bitMask | tempBitMask , lastNum-1)
-    if lastNum < 9:
-        tempBitMask = 0b1 << (lastNum+1)
-        result += dfs(leftLen-1, bitMask | tempBitMask , lastNum+1)
-    dp[key] = result % DIV
-    return result % DIV
-    
-result = 0
+# 길이 1인 경우들 1로 채우기
 for startNum in range(1, 10):
-    result += dfs(N-1, 0b1 << startNum ,startNum)
-print(f"{result % DIV}")
+    dp[0][startNum][0b1 << startNum] = 1
+
+for prevLenIdx in range(N-1):
+    for lastNum in range(10):
+        for bitMask in range(ALL+1):
+            
+            if lastNum > 0:
+                newBitMask =  bitMask | (0b1 << (lastNum -1))
+                dp[prevLenIdx+1][lastNum-1][newBitMask] += dp[prevLenIdx][lastNum][bitMask]
+                dp[prevLenIdx+1][lastNum-1][newBitMask] %= MOD
+            if lastNum < 9:
+                newBitMask =  bitMask | (0b1 << (lastNum +1))
+                dp[prevLenIdx+1][lastNum+1][newBitMask] += dp[prevLenIdx][lastNum][bitMask]
+                dp[prevLenIdx+1][lastNum+1][newBitMask] %= MOD
+
+result = 0
+for lastNum in range(10):
+    result += dp[N-1][lastNum][ALL]
+print(f"{result % MOD}")
+    
