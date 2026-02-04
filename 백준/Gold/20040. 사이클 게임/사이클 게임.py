@@ -5,10 +5,12 @@ n, m = map(int, input().strip().split())
 
 parents = [i for i in range(n)]
 
+
 def findRoot(i):
     global parents
 
     iterI = i
+    # 재귀 X, 반복문 사용
     while parents[iterI] != iterI:
         iterI = parents[iterI]
         
@@ -29,10 +31,7 @@ def solution():
             return i+1 
 
         # 두 그룹 합치기
-        if aRoot < bRoot:
-            parents[aRoot] = bRoot
-        else:
-            parents[bRoot] = aRoot
+        parents[aRoot] = bRoot
         
     return 0
 print(solution())
