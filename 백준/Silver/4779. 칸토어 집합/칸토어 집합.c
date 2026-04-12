@@ -1,33 +1,32 @@
 #include <stdio.h>
 
-void printResult(char* str, int startIdx, int size){
-    if (size <= 1)
-        return;
-    
-    printResult(str, startIdx, size/3);
+// 거듭제곱을 정수형으로 직접 계산 (오차 방지)
+long long ipow(int exp) {
+    long long res = 1;
+    while (exp-- > 0) res *= 3;
+    return res;
+}
 
-    for(int i = 0 ; i <size/3 ; i++){
-        str[startIdx+size/3+i] = ' ';
+void printResult(long long len) {
+    if (len == 1) {
+        printf("-");
+        return;
     }
-    
-    printResult(str, startIdx + size/3 * 2, size/3);
+
+    int next_len = len / 3;
+    printResult(next_len);
+    for (int i = 0; i < next_len; i++) {
+        printf(" ");
+    }
+
+    printResult(next_len);
 }
 
 int main() {
     int N;
-
-    while(scanf("%d", &N) != EOF){
-        int len = 1;
-        for(int i=0 ; i <N ; i++)
-            len*=3;
-        
-        char str[len+1];
-        for(int i= 0 ; i < len ; i++){
-            str[i] = '-';
-        }
-        str[len] = '\0';
-        
-        printResult(str, 0, len);
-        printf("%s\n", str);
+    while (scanf("%d", &N) != EOF) {
+        printResult(ipow(N));
+        printf("\n");
     }
+    return 0;
 }
