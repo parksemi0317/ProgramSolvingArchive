@@ -3,7 +3,7 @@ def solution(money):
     n = len(money)
     dp = [[[0 for _ in range(2)]for _ in range(n)] for _ in range(2) ]
     
-    # dp [시작집 0/1][종료집][종료집 0/1]
+    # dp [시작집 포함여부][종료집 idx][종료집 포함 여부]
     dp[1][0][1] = money[0]
     dp[0][0][0] = 0
     
