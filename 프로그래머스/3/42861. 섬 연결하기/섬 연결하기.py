@@ -3,12 +3,12 @@ from collections import deque
 def solution(n, costs):
     costs = deque(sorted(costs, key=lambda x:x[2]))
     
-    result = 0
-    addCnt = 0
+    result = 0 # 전체 소요 건설비용
+    addCnt = 0 # 추가된 다리 개수
     
-    root = [i for i in range(n+1)]
+    root = [i for i in range(n+1)] # 분리 집합
     
-    def getRoot(x):
+    def getRoot(x): # 분리 집합 루트 구하는 함수 (재귀)
         if root[x] == x:
             return x
         
