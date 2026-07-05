@@ -25,10 +25,9 @@ def solution(dice):
     
     getCase(tmp, 1, 1, dice_cnt)
     
-    # print("cases :", cases)
-    
     # ========= 각 케이스별 승률 확인
     
+    # 특정 주사위 조합에서의 sum 모든 경우의 수 구하기
     def getSumCase(case_dices):
         q = deque([[0, 0]])
         result = []
@@ -43,7 +42,7 @@ def solution(dice):
                 q.append([cur_sum + d, cur_idx+1])
         return result
               
-    
+    # 특정 case의 승,패,무 확률 구하기
     def getProbabilty(c):
         # 현재 케이스의 a와 b주사위 나누기
         a = []
@@ -103,6 +102,4 @@ def solution(dice):
             for i, tf in enumerate(c):
                 if not tf:
                     answer.append(i+1)
-    return answer
-    
-    
+    return answer   
