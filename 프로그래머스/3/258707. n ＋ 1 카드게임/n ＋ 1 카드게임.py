@@ -3,92 +3,74 @@ from collections import deque
 def solution(coin, cards):
     # ========== 초기 값 세팅
     n = len(cards)
+    deck = deque(cards[n//3:])
+     # 1 : 소유, 0 : 미소유, -1 : 제출, 2 : 가져올 수 있음
+    cardStates = [0 for _ in range(n+1)]
     
-     # 1 : 소유, 0 : 미소유, -1 : 제출, 2 : 사용 가능
-    curCard = [0 for _ in range(n+1)]
+    result = 1
+    useOneCoinPair = 0 # 코인 1개만 내면 되는 경우
+    useTwoCoinPair = 0 # 코인 2개만 내면 되는 경우
+    # ========= 유틸 함수
+    def getTwoNewCard():
+        nonlocal cardStates, cards, useOneCoinPair, useTwoCoinPair
+        
+        for i in range(2):
+            if not deck:
+                return False
+            
+            newCard = deck.popleft()
+            print("newCard :", newCard, end="")
+            pair = n+1-newCard
+            
+            cardStates[newCard] = 2
+            if cardStates[pair] == 1:
+                useOneCoinPair += 1
+                print("=> useOneCoinPair+1", useOneCoinPair,end="")
+            elif cardStates[pair] == 2:
+                useTwoCoinPair += 1
+                print("=> useTwoCoinPair+1", useTwoCoinPair,end="")
+            print()
+        return True
+    # ========= 초기에 들고 있는 카드 처리
     
     # 초기에 들고 있는 카드 소유로 세팅
-    for c in cards[:n//3]: 
-        curCard[c] = 1
+    # 짝을 지어 낼 수 있는 경우 내기
+    for i in range(n//3):
+        c = cards[i]
+        cardStates[c] = 1
         
-    canUse= deque([])
-    cardDeck = deque(cards[n//3:])
-    curRound = 1
-    
-    # ========== 유틸 함수
-    
-    # 두개의 카드를 덱에서 빼는 함수
-    # canUse에 추가하고, curCard값을 2(사용 가능)로 둠
-    def addTwoCard():
-        nonlocal canUse, cardDeck
-        for i in range(2):
-            if not cardDeck:
-                return False
-            c = cardDeck.popleft()
-            canUse.append(c)
-            curCard[c] = 2
-        return True
-    
-    def payTwoCard(c1, c2):
-        nonlocal curCard, curRound
-        curCard[c1] = -1
-        curCard[c2] = -1
-        curRound += 1
-        
-    # ========== coin 사용하지 않고 초기 카드로 처리 가능한 경우 구하기
-    
-    addTwoCard()
-    for i in range(1, n+1):
-        if curCard[i] == 1 and curCard[n+1-i] == 1:
-            payTwoCard(i, n+1-i)
+        pair = n+1-c
+        if cardStates[pair] == 1: # 짝을 지어 낼 수 있는 경우
+            cardStates[pair] = -1
+            cardStates[c] = -1
             
-            if not addTwoCard(): # 더이상 새로 뽑을 카드가 없는 경우
-                return curRound # 종료
+            result += 1
+    # 초기 진행된 라운드 수 만큼 덱에서 카드 가져오기
+    for i in range(result):
+        if not getTwoNewCard():
+            return result
     
-    # ========== coin 사용
-    
+    # ========= 코인을 내서 처리하는 경우 체크
     while coin > 0:
-        
-        needTwo = deque([])
-        
-        # 하나로 처리 가능한 경우 확인하기
-        while canUse and coin > 0:
-            c = canUse.popleft()
-            if curCard[c] !=2:
-                continue
+        # 코인 1개만 내면 되는 경우 모두 처리
+        while coin > 0 and useOneCoinPair > 0:
+            result += 1
+            useOneCoinPair -= 1
+            coin -= 1
             
-            pair = n+1-c
-            if curCard[pair] == 1: # 하나로 처리 가능한 경우
-                coin -= 1
-                payTwoCard(c, pair)
-                
-                if not addTwoCard(): # 다음 단계로 넘어갈 수 없는 경우 종료
-                    return curRound
-                continue # 하나로 처리 가능한 케이스 더 찾기
-            else: # 하나로 처리 불가능한 경우 needTwo에 넣기
-                needTwo.append(c)
-                
-        if coin < 2: # 코인이 2개 미만인 경우 바로 종료
-            return curRound
+            if not getTwoNewCard(): # 새로운 카드 두 장 가져오기
+                return result
+            
+        # 코인 2개 내면 되는 경우 처리 (1번만, 하나 발견 되면 다시 1개만 내도 되는 경우 처리)
+        if coin >= 2 and useTwoCoinPair >0:
+            result += 1
+            useTwoCoinPair -= 1
+            coin -= 2
+            
+            if not getTwoNewCard(): # 새로운 카드 두 장 가져오기
+                return result
+        else: # 2개 내도 안되는 경우 종료
+            return result
+    return result
         
-        # 하나로 처리 가능한 케이스가 없는 경우 2개로 처리 가능한 경우 확인
-        flag = 0 # 가능 케이스를 찾았는지 여부
-        while needTwo:
-            c = needTwo.popleft()
-            if curCard[c] !=2:
-                continue
-                    
-            pair = n+1-c
-            if curCard[pair] == 2: # 가능 케이스 찾은 경우
-                coin -= 2
-                canUse += needTwo
-                flag = 1
-                payTwoCard(pair, c)
-                
-                if not addTwoCard(): # 덱에 더 뽑을 카드 없는 경우 종료
-                    return curRound
-                break # 다시 위로 올라가서 하나로 처리 가능한 경우 있는지 봐야함
-        if flag == 0: # 2개로도 처리 가능한 경우가 없다면 종료
-            return curRound
-
-    return curRound
+    
