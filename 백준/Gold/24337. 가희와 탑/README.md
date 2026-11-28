@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 101724 KB, 시간: 115 ms
+메모리: 101724 KB, 시간: 110 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2026년 11월 28일 19:56:29
+2026년 11월 28일 20:01:33
 
 ### 문제 설명
 
@@ -35,13 +35,13 @@
 
 <p>예를 들어, <em>N</em>이 3이고, 1번 건물의 높이가 1, 2번 건물의 높이가 3, 3번 건물의 높이가 2라고 하겠습니다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/5a6e0313-a6d1-43b4-9997-926cae9b0905/-/preview/"></p>
+<p style="text-align: center;"><img alt="" src=""></p>
 
 <p style="text-align: center;"><strong>[그림 1] 가희와 단비, 그리고 건물들의 배치</strong></p>
 
 <p>가희가 볼 수 있는 건물과 단비가 볼 수 있는 건물의 수는 각각 2개입니다. 이를 각각 노란색, 연보라색으로 표시하겠습니다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/f0583b2b-3237-498e-95cf-af714b52cd15/-/preview/">  <img alt="" src="https://upload.acmicpc.net/777defd0-84a6-40ae-a24f-89154fa6ab8c/-/preview/"></p>
+<p style="text-align: center;"><img alt="" src="">  <img alt="" src=""></p>
 
 <p style="text-align: center;"><strong>[좌] 가희가 볼 수 있는 건물 [우] 단비가 볼 수 있는 건물</strong></p>
 
