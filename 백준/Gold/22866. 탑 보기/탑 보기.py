@@ -6,7 +6,7 @@ buildings = list(enumerate(map(int, input().split()))) # (idx, 높이)
 leftDp = [[0, -1] for _ in range(N)] # (좌측에 보이는 빌딩 수, 가장 가까이 보이는 좌측 건물 idx)
 rightDp = [[0, -1] for _ in range(N)] # (우측에 보이는 빌딩 수, 가장 가까이 보이는 우측 건물 idx)
 
-# buildings 배열을 받아 왼쪽부터 순회하면서 
+# buildings 배열을 받아 왼쪽부터 순회하면서 좌측에 보이는 빌딩 수와 가장 가까이 보이는 빌딩 인덱스 저장
 def getLeftDp(buildings, dp):
     for i in range(1, N):
         
@@ -30,18 +30,20 @@ def getLeftDp(buildings, dp):
                 dp[i][0] = dp[j][0]+1
                 dp[i][1] = buildings[j][0]
             
-
+# ========== 1. 좌측 빌딩 확인
 getLeftDp(buildings, leftDp)
 # print("[DEBUG] leftDp    :", leftDp)
 
+# ========== 2. 우측 빌딩 확인
 buildings.reverse()
 getLeftDp(buildings, rightDp)
 # print("[DEBUG] rightDp   :", rightDp)
 rightDp.reverse()
 # print("[DEBUG] rightDp   :", rightDp)
 
+# ========== 3. 좌측과 우측 합쳐서 결과 출력
 
-
+# 좌축과 우측에 보이는 인덱스 받아서 출력해야하는 빌딩 번호 반환
 def getNearst(left, right, i):
     if left == -1:
         return right + 1
